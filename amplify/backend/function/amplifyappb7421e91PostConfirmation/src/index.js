@@ -25,7 +25,7 @@ const modules = moduleNames.map((name) => require(`./${name}`));
 exports.handler = async (event, context) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
 
-  const email = event.requestContext.userAttributes.email;
+  const email = event.request.userAttributes.email;
 
   const postData = JSON.stringify({
       email: email
