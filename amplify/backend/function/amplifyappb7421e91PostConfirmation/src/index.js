@@ -23,11 +23,26 @@ const modules = moduleNames.map((name) => require(`./${name}`));
  *
  */
 exports.handler = async (event, context) => {
-  /**
-   * Instead of naively iterating over all handlers, run them concurrently with
-   * `await Promise.all(...)`. This would otherwise just be determined by the
-   * order of names in the `MODULES` var.
-   */
+  console.log(`EVENT: ${JSON.stringify(event)}`);
+
+  const email = event.requestContext.userAttributes.email;
+
+  const postData = JSON.stringify({
+      email: email
+  });
+
+  const options = {
+      method: 'POST',
+      headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData)
+      },
+      body: postData
+  };
+  const response = await fetch("https://huix8w2yq5.execute-api.us-west-2.amazonaws.com/prod/users", options)
+  const data = await response.json();
+    
+  console.log(data);
   await Promise.all(modules.map((module) => module.handler(event, context)));
   return event;
 };

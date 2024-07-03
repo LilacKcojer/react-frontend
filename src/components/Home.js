@@ -16,7 +16,7 @@ const Home = ({user, signOut}) => {
         body: JSON.stringify(requestBody),
     };
 
-    const getUsers = async () => {
+    const addUsers = async () => {
         const response = await fetch("https://huix8w2yq5.execute-api.us-west-2.amazonaws.com/prod/users", options)
         const data = await response.json();
 
@@ -25,7 +25,7 @@ const Home = ({user, signOut}) => {
     }
     
     useEffect(() => {
-        //getUsers();
+        //addUsers();
     },[]);
 
     return (
