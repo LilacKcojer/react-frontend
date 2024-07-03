@@ -25,7 +25,7 @@ const Home = ({user, signOut}) => {
     }
     
     useEffect(() => {
-        getUsers();
+        //getUsers();
     },[]);
 
     return (
