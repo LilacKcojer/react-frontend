@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 const AddGoals = ({user, signOut}) => {
 
@@ -67,6 +67,12 @@ const AddGoals = ({user, signOut}) => {
     
     }
 
+   
+    const [task, setTask] = React.useState('');
+  
+    const handleChange = (event) => {
+      setTask(event.target.value);
+    };
 
     return (
         <>
@@ -93,6 +99,7 @@ const AddGoals = ({user, signOut}) => {
                         id="demo-simple-select"
                         value={task}
                         label="Task"
+                        onChange={handleChange}
                     >
                         <MenuItem value={"VT Floatshot Advanced S3"}>VT Floatshot Advanced S3</MenuItem>
                         <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
