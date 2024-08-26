@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-const Home = ({user, signOut}) => {
+const Goals = ({user, signOut}) => {
 
     const [open, setOpen] = React.useState(false);
 
@@ -65,7 +65,7 @@ const Home = ({user, signOut}) => {
 
     return (
         <>
-            <h1>Home</h1>
+            <h1>Goals</h1>
             <Button onClick={toggleDrawer(true)}>Pages</Button>
             <Drawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
@@ -75,4 +75,4 @@ const Home = ({user, signOut}) => {
     )
 };
 
-export default Home;
+export default Goals;
