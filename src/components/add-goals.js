@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -71,6 +72,39 @@ const AddGoals = ({user, signOut}) => {
             {DrawerList}
             </Drawer>
             <button onClick={signOut}>Sign out</button>
+            <div>
+                <h2>Add new goals</h2>
+                <Box
+                component="form"
+                sx={{
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+                >
+                <div>
+                    <InputLabel id="Task">Age</InputLabel>
+                    <Select
+                        labelId="Task"
+                        id="TaskSelect"
+                        value={task}
+                        label="Task"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={"VT FLOATSHOT ADVANCED S3"}>VT FLOATSHOT ADVANCED S3</MenuItem>
+                        <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
+                        <MenuItem value={"VT Jettrack Advanced S3"}>VT Jettrack Advanced S3</MenuItem>
+                    </Select>
+                    <TextField
+                    required
+                    id="outlined-required"
+                    label="Required"
+                    defaultValue="Score"
+                    />
+                    <Button variant="contained" type="submit">Contained</Button>
+                </div>
+                </Box>
+            </div>
         </>
     )
 };
