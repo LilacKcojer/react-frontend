@@ -9,6 +9,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const AddGoals = ({user, signOut}) => {
 
@@ -83,15 +87,14 @@ const AddGoals = ({user, signOut}) => {
                 autoComplete="off"
                 >
                 <div>
-                    <InputLabel id="Task">Age</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
                     <Select
-                        labelId="Task"
-                        id="TaskSelect"
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
                         value={task}
                         label="Task"
-                        onChange={handleChange}
                     >
-                        <MenuItem value={"VT FLOATSHOT ADVANCED S3"}>VT FLOATSHOT ADVANCED S3</MenuItem>
+                        <MenuItem value={"VT Floatshot Advanced S3"}>VT Floatshot Advanced S3</MenuItem>
                         <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
                         <MenuItem value={"VT Jettrack Advanced S3"}>VT Jettrack Advanced S3</MenuItem>
                     </Select>
@@ -101,7 +104,7 @@ const AddGoals = ({user, signOut}) => {
                     label="Required"
                     defaultValue="Score"
                     />
-                    <Button variant="contained" type="submit">Contained</Button>
+                    <Button variant="contained" type="submit">Add goal</Button>
                 </div>
                 </Box>
             </div>
