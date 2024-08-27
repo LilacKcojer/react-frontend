@@ -16,6 +16,8 @@ import Select from '@mui/material/Select';
 
 const AddGoals = ({user, signOut}) => {
 
+    console.log(user);
+
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen) => () => {
@@ -45,26 +47,11 @@ const AddGoals = ({user, signOut}) => {
     );
 
 
-    const [users, setUsers] = useState(null);
     
-    const requestBody = {
-        email: 'email2@test.com'
-    }
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-    };
-
-    const addUsers = async () => {
-        const response = await fetch("https://huix8w2yq5.execute-api.us-west-2.amazonaws.com/prod/users", options)
-        const data = await response.json();
-
-        setUsers(data);
-    
+    const addGoals = async (options) => {
+        await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/", options);
+        //const data = await response.json();
     }
 
    
@@ -79,9 +66,20 @@ const AddGoals = ({user, signOut}) => {
         setTask(event.target.value);
     };
 
-    const onSubmit = () => {
-        console.log(task);
-        console.log(score);
+    const onSubmit = async () => {
+        const email = user.signInDetails.loginId;
+        const items = [{task,score}];
+        const input = {email, items};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(input),
+        };
+
+        await addGoals(options);
     }
 
 
@@ -104,7 +102,7 @@ const AddGoals = ({user, signOut}) => {
                 autoComplete="off"
                 >
                 <div>
-                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Task</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
