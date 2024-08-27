@@ -27,7 +27,7 @@ const Home = ({user, signOut}) => {
             </ListItem>
             <ListItem key={"Goals"} disablePadding>
                 <ListItemButton href='/goals'>
-                    <ListItemText primary={"Home"} />
+                    <ListItemText primary={"Goals"} />
                 </ListItemButton>
             </ListItem>
             <ListItem key={"Create Goals"} disablePadding>

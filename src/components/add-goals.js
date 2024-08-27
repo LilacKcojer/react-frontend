@@ -32,7 +32,7 @@ const AddGoals = ({user, signOut}) => {
             </ListItem>
             <ListItem key={"Goals"} disablePadding>
                 <ListItemButton href='/goals'>
-                    <ListItemText primary={"Home"} />
+                    <ListItemText primary={"Goals"} />
                 </ListItemButton>
             </ListItem>
             <ListItem key={"Create Goals"} disablePadding>
@@ -69,10 +69,21 @@ const AddGoals = ({user, signOut}) => {
 
    
     const [task, setTask] = React.useState('');
+    const [score, setScore] = React.useState('');
   
-    const handleChange = (event) => {
-      setTask(event.target.value);
+    const handleChangeScore = (event) => {
+      setScore(event.target.value);
     };
+
+    const handleChangeTask = (event) => {
+        setTask(event.target.value);
+    };
+
+    const onSubmit = () => {
+        console.log(task);
+        console.log(score);
+    }
+
 
     return (
         <>
@@ -99,7 +110,7 @@ const AddGoals = ({user, signOut}) => {
                         id="demo-simple-select"
                         value={task}
                         label="Task"
-                        onChange={handleChange}
+                        onChange={handleChangeTask}
                     >
                         <MenuItem value={"VT Floatshot Advanced S3"}>VT Floatshot Advanced S3</MenuItem>
                         <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
@@ -110,8 +121,10 @@ const AddGoals = ({user, signOut}) => {
                     id="outlined-required"
                     label="Required"
                     defaultValue="Score"
+                    value={score}
+                    onChange={handleChangeScore}
                     />
-                    <Button variant="contained" type="submit">Add goal</Button>
+                    <Button variant="contained" onClick={onSubmit}>Add goal</Button>
                 </div>
                 </Box>
             </div>
