@@ -73,8 +73,8 @@ const AddGoals = ({user, signOut}) => {
 
     const onSubmit = async () => {
         const email = user.signInDetails.loginId;
-        const items = [{task,score}];
-        const input = {email, items, username};
+        const items = [{task, score, username}];
+        const input = {email, items};
 
         const options = {
             method: 'POST',
