@@ -18,8 +18,7 @@ function App({ signOut, user }) {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={Home({user, signOut})}></Route>
-        <Route path="/goals" element={Goals({user, signOut})}></Route>
-        <Route path="/add-goals" element={AddGoals({user, signOut})}></Route>
+        <Route path="/goals" element={AddGoals({user, signOut})}></Route>
       </Routes>
     </BrowserRouter>
   );

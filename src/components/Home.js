@@ -30,11 +30,6 @@ const Home = ({user, signOut}) => {
                     <ListItemText primary={"Goals"} />
                 </ListItemButton>
             </ListItem>
-            <ListItem key={"Create Goals"} disablePadding>
-                <ListItemButton href='/add-goals'>
-                    <ListItemText primary={"Create Goals"} />
-                </ListItemButton>
-            </ListItem>
         </List>
         </Box>
     );
