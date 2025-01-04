@@ -57,6 +57,7 @@ const AddGoals = ({user, signOut}) => {
    
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
+    const [username, setUsername] = React.useState('');
   
     const handleChangeScore = (event) => {
       setScore(event.target.value);
@@ -66,10 +67,14 @@ const AddGoals = ({user, signOut}) => {
         setTask(event.target.value);
     };
 
+    const handleChangeUsername = (event) => {
+        setUsername(event.target.value);
+    };
+
     const onSubmit = async () => {
         const email = user.signInDetails.loginId;
         const items = [{task,score}];
-        const input = {email, items};
+        const input = {email, items, username};
 
         const options = {
             method: 'POST',
@@ -117,10 +122,18 @@ const AddGoals = ({user, signOut}) => {
                     <TextField
                     required
                     id="outlined-required"
-                    label="Required"
+                    label="Score"
                     defaultValue="Score"
                     value={score}
                     onChange={handleChangeScore}
+                    />
+                    <TextField
+                    required
+                    id="outlined-required"
+                    label="Username"
+                    defaultValue="Username"
+                    value={username}
+                    onChange={handleChangeUsername}
                     />
                     <Button variant="contained" onClick={onSubmit}>Add goal</Button>
                 </div>
