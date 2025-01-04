@@ -85,14 +85,14 @@ const AddGoals = ({user, signOut}) => {
 
     return (
         <>
-            <h1>Create Goals</h1>
+            <h1>Goals</h1>
             <Button onClick={toggleDrawer(true)}>Pages</Button>
             <Drawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
             </Drawer>
             <button onClick={signOut}>Sign out</button>
             <div>
-                <h2>Add new goals</h2>
+                <h2>Change goal</h2>
                 <Box
                 component="form"
                 sx={{
@@ -102,7 +102,6 @@ const AddGoals = ({user, signOut}) => {
                 autoComplete="off"
                 >
                 <div>
-                    <InputLabel id="demo-simple-select-label">Task</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
