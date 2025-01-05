@@ -58,10 +58,66 @@ const AddGoals = ({user, signOut}) => {
         return body;
     }
 
+    const getAimlabStats = async (username, task) => {
+        const input = {"query":"\n  query GetProfile($username: String) {\n    aimlabProfile(username: $username) {\n      username\n      user {\n        id\n      }\n      ranking {\n        rank {\n          displayName\n        }\n        skill\n      }\n    }\n  }\n","variables":{"username": username}}
+        
+        
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(input),
+        }
+
+        const response = await fetch("https://api.voltaic.gg/aimlabs/graphql", options);
+
+        console.log(response);
+
+        if(response.ok){
+
+            const userId = response.json().aimlabProfile.user.id;
+
+            console.log("user id: " + userId);
+            
+            const inputStats = {"query":"\n  query GetAimlabProfileAgg($where: AimlabPlayWhere!) {\n    aimlab {\n      plays_agg(where: $where) {\n        group_by {\n          task_id\n          task_name\n        }\n        aggregate {\n          count\n          avg {\n            score\n            accuracy\n          }\n          max {\n            score\n            accuracy\n            created_at\n          }\n        }\n      }\n    }\n  }\n","variables":{"where":{"is_practice":{"_eq":false},"score":{"_gt":0},"user_id":{"_eq": userId },"task_mode":{"_eq":42}}}}
+            
+            const optionsStats = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputStats),
+            }
+
+            const responseStats = await fetch("https://api.voltaic.gg/aimlabs/graphql", optionsStats);
+
+            console.log("Stats:\n");
+            console.log(responseStats);
+
+            if(response.ok){
+                const data = responseStats.json().data.aimlab.plays_agg;
+
+                for (var i = 0; i < data.length; i++){
+                    if(data[i].group_by.task_name === task){
+                        return data[i].aggregate.max.score;
+                    }
+                }
+            }
+        } 
+    }
+
     var currentGoals;
+    var currentScoreAtGoals;
     useEffect(async() => {
         currentGoals = await getGoals(user.signInDetails.loginId);
+        currentGoals = currentGoals.Item.item[0];
         console.log(currentGoals);
+
+        const username = currentGoals.username;
+        const task = currentGoals.task;
+        currentScoreAtGoals = await getAimlabStats(username, task);
+        console.log(currentScoreAtGoals);
     },[]);
 
     
@@ -96,6 +152,7 @@ const AddGoals = ({user, signOut}) => {
         };
 
         await addGoals(options);
+        window.location.reload();
     }
 
 
