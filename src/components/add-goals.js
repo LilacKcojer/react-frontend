@@ -61,9 +61,10 @@ const AddGoals = ({user, signOut}) => {
     var currentGoals;
     useEffect(async() => {
         currentGoals = await getGoals(user.signInDetails.loginId);
+        console.log(currentGoals);
     },[]);
 
-    console.log(currentGoals);
+    
    
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
