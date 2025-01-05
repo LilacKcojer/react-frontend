@@ -65,6 +65,8 @@ const AddGoals = ({user, signOut}) => {
            currentGoals = await getGoals(user.signInDetails.loginId);
         }, []) // <-- empty dependency array
     }
+
+    console.log(currentGoals);
    
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
