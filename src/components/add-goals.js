@@ -54,12 +54,17 @@ const AddGoals = ({user, signOut}) => {
             method: 'GET'
         }
         const response = await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/" + email, options)
-        return await response.json();
+        const body = await response.json();
+        return body;
     }
 
-    const start_goal = getGoals(user.signInDetails.loginId);
+    var currentGoals;
 
-    console.log(start_goal);
+    const initGoals = async() => {
+        useEffect(async ()=>{
+           currentGoals = await getGoals(user.signInDetails.loginId);
+        }, []) // <-- empty dependency array
+    }
    
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
