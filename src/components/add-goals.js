@@ -59,12 +59,9 @@ const AddGoals = ({user, signOut}) => {
     }
 
     var currentGoals;
-
-    const initGoals = async() => {
-        useEffect(async ()=>{
-           currentGoals = await getGoals(user.signInDetails.loginId);
-        }, []) // <-- empty dependency array
-    }
+    useEffect(async() => {
+        currentGoals = await getGoals(user.signInDetails.loginId);
+    },[]);
 
     console.log(currentGoals);
    
