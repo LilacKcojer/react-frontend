@@ -64,6 +64,7 @@ const AddGoals = ({user, signOut}) => {
         
         const options = {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -85,6 +86,7 @@ const AddGoals = ({user, signOut}) => {
         
         const optionsStats = {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -112,7 +114,7 @@ const AddGoals = ({user, signOut}) => {
     var currentGoals;
     var currentScoreAtGoals;
     useEffect(async() => {
-        currentGoals = await getGoals(user.signInDetails.loginId.toLowerCase());
+        currentGoals = await getGoals(user.signInDetails.loginId);
         currentGoals = currentGoals.Item.items[0];
         console.log(currentGoals);
 
@@ -147,14 +149,17 @@ const AddGoals = ({user, signOut}) => {
 
         const options = {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(input),
         };
-
-        await addGoals(options);
+        try{
+            await addGoals(options);
+        } catch(err){
+            console.log(err);
+        }
+        
     }
 
 
