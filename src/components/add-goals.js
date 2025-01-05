@@ -64,7 +64,6 @@ const AddGoals = ({user, signOut}) => {
         
         const options = {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -86,7 +85,6 @@ const AddGoals = ({user, signOut}) => {
         
         const optionsStats = {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
