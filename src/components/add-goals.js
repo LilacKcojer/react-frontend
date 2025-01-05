@@ -49,6 +49,16 @@ const AddGoals = ({user, signOut}) => {
         //const data = await response.json();
     }
 
+    const getGoals = async (email) => {
+        const options = {
+            method: 'GET'
+        }
+        return await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/" + email, options)
+    }
+
+    const start_goal = getGoals(user.signInDetails.loginId);
+
+    console.log(start_goal);
    
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
