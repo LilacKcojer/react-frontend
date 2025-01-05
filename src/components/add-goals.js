@@ -53,7 +53,8 @@ const AddGoals = ({user, signOut}) => {
         const options = {
             method: 'GET'
         }
-        return await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/" + email, options)
+        const response = await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/" + email, options)
+        return await response.json();
     }
 
     const start_goal = getGoals(user.signInDetails.loginId);
@@ -133,7 +134,7 @@ const AddGoals = ({user, signOut}) => {
                     />
                     <TextField
                     required
-                    id="outlined-required"
+                    id="outlined"
                     label="Username"
                     defaultValue="Username"
                     value={username}
