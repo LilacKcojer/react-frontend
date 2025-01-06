@@ -60,12 +60,16 @@ const Home = ({user, signOut}) => {
 
     return (
         <>
-            <h1>Home</h1>
-            <Button onClick={toggleDrawer(true)}>Pages</Button>
+            <h1>&emsp;Home</h1>
+            <div>
+            &emsp; &emsp;
+            <Button variant="outlined" onClick={toggleDrawer(true)}>Pages</Button>
             <Drawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
             </Drawer>
-            <button onClick={signOut}>Sign out</button>
+            &emsp;
+            <Button variant="outlined" onClick={signOut}>Sign out</Button>
+            </div>
         </>
     )
 };

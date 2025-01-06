@@ -13,6 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import {BarChart} from '@mui/x-charts';
 
 const AddGoals = ({user, signOut}) => {
 
@@ -109,8 +110,12 @@ const AddGoals = ({user, signOut}) => {
         } 
     }
 
+    const [goalScore, setGoalScore] = React.useState(0);
+    const [actualScore, setActualScore] = React.useState(0);
+
     var currentGoals;
     var currentScoreAtGoals;
+
     useEffect(async() => {
         currentGoals = await getGoals(user.signInDetails.loginId);
         currentGoals = currentGoals.Item.items[0];
@@ -120,6 +125,8 @@ const AddGoals = ({user, signOut}) => {
         const task = currentGoals.task;
         currentScoreAtGoals = await getAimlabStats(username, task);
         console.log(currentScoreAtGoals);
+        setActualScore(currentScoreAtGoals);
+        setGoalScore(currentGoals.score);
     },[]);
 
     
@@ -127,6 +134,8 @@ const AddGoals = ({user, signOut}) => {
     const [task, setTask] = React.useState('');
     const [score, setScore] = React.useState('');
     const [username, setUsername] = React.useState('');
+
+
   
     const handleChangeScore = (event) => {
       setScore(event.target.value);
@@ -154,43 +163,50 @@ const AddGoals = ({user, signOut}) => {
         };
         try{
             await addGoals(options);
+            window.location.reload();
         } catch(err){
             console.log(err);
         }
         
     }
 
-
     return (
         <>
-            <h1>Goals</h1>
-            <Button onClick={toggleDrawer(true)}>Pages</Button>
-            <Drawer open={open} onClose={toggleDrawer(false)}>
-            {DrawerList}
-            </Drawer>
-            <button onClick={signOut}>Sign out</button>
+            <h1> &emsp;Goals</h1>
             <div>
-                <h2>Change goal</h2>
+                &emsp; &emsp;
+                <Button variant="outlined" onClick={toggleDrawer(true)}>Pages</Button>
+                <Drawer open={open} onClose={toggleDrawer(false)}>
+                {DrawerList}
+                </Drawer>
+                &emsp;
+                <Button variant="outlined" onClick={signOut}>Sign out</Button>
+            </div>
+            
+            <div>
+                <h2>&emsp; Change goal</h2>
                 <Box
                 component="form"
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
                 noValidate
                 autoComplete="off"
                 >
                 <div>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                    &emsp;
+                    <FormControl sx={{minWidth: 120}}>
+                        <InputLabel id="demo-simple-select-standard-label">Task</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
                         value={task}
                         label="Task"
                         onChange={handleChangeTask}
-                    >
-                        <MenuItem value={"VT Floatshot Advanced S3"}>VT Floatshot Advanced S3</MenuItem>
-                        <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
-                        <MenuItem value={"VT Jettrack Advanced S3"}>VT Jettrack Advanced S3</MenuItem>
-                    </Select>
+                        >
+                            <MenuItem value={"VT Floatshot Advanced S3"}>VT Floatshot Advanced S3</MenuItem>
+                            <MenuItem value={"VT Shifttrack Advanced S3"}>VT Shifttrack Advanced S3</MenuItem>
+                            <MenuItem value={"VT Jettrack Advanced S3"}>VT Jettrack Advanced S3</MenuItem>
+                        </Select>
+                    </FormControl>
+                    &emsp;
                     <TextField
                     required
                     id="outlined-required"
@@ -199,6 +215,7 @@ const AddGoals = ({user, signOut}) => {
                     value={score}
                     onChange={handleChangeScore}
                     />
+                    &emsp;
                     <TextField
                     required
                     id="outlined"
@@ -207,9 +224,19 @@ const AddGoals = ({user, signOut}) => {
                     value={username}
                     onChange={handleChangeUsername}
                     />
+                    &emsp;
                     <Button variant="contained" onClick={onSubmit}>Add goal</Button>
                 </div>
                 </Box>
+                <div>
+                    &emsp; &emsp;
+                    <BarChart
+                    xAxis={[{ scaleType: 'band', data: ['Goal', 'Current'] }]}
+                    series={[{ data: [goalScore] }, { data: [actualScore]}]}
+                    width={500}
+                    height={300}
+                    />
+                </div>
             </div>
         </>
     )
