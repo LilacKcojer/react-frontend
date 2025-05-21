@@ -71,7 +71,7 @@ const AddGoals = ({user, signOut}) => {
             body: JSON.stringify(input),
         }
 
-        const response = await fetch("https://api.voltaic.gg/aimlabs/graphql", options)
+        const response = await fetch("https://api.aimlab.gg/graphql", options)
             .then(function(result){
                 return result.json();
             });
@@ -92,7 +92,7 @@ const AddGoals = ({user, signOut}) => {
             body: JSON.stringify(inputStats),
         }
 
-        const responseStats = await fetch("https://api.voltaic.gg/aimlabs/graphql", optionsStats)
+        const responseStats = await fetch("https://api.aimlab.gg/graphql", optionsStats)
             .then(function(result){
                 return result.json();
             });;
