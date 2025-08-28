@@ -160,14 +160,14 @@ const AddGoals = ({user, signOut}) => {
             if(currentGoals.username != null){
                 setUsername(currentGoals.username)
             }
-            if(currentGoals.score != null){
+            if(currentGoals.score !== ""){
                 setGoalScore(currentGoals.score);
                 setScore(currentGoals.score);
             }
             if(currentGoals.history != null){
                 setHistory(currentGoals.history)
             }
-            if(currentGoals.username != null && currentGoals.task != null){
+            if(currentGoals.username != null && currentGoals.task !== ""){
                 currentScoreAtGoals = await getAimlabStats(currentGoals.username, currentGoals.task);
                 console.log(currentScoreAtGoals);
                 setActualScore(currentScoreAtGoals);

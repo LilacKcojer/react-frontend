@@ -60,35 +60,80 @@ const Home = ({user, signOut}) => {
             mode: 'dark'
         }
     });
-    const [users, setUsers] = useState(null);
     
-    const requestBody = {
-        email: 'email2@test.com'
+    const getGoals = async (email) => {
+        const options = {
+            method: 'GET'
+        }
+        const response = await fetch("https://hsw4k5p2qd.execute-api.us-west-2.amazonaws.com/prod/" + email, options)
+        const body = await response.json();
+        return body;
     }
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-    };
+    const getAimlabStats = async (username, task) => {
+        const input = {"query":"\n  query GetProfile($username: String) {\n    aimlabProfile(username: $username) {\n      username\n      user {\n        id\n      }\n      ranking {\n        rank {\n          displayName\n        }\n        skill\n      }\n    }\n  }\n","variables":{"username": username}}
+        
+        
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(input),
+        }
 
-    const addUsers = async () => {
-        const response = await fetch("https://huix8w2yq5.execute-api.us-west-2.amazonaws.com/prod/users", options)
-        const data = await response.json();
+        const response = await fetch("https://api.aimlab.gg/graphql", options)
+            .then(function(result){
+                return result.json();
+            });
 
-        setUsers(data);
-    
+        console.log(response);
+
+        const userId = response.data.aimlabProfile.user.id;
+
+        console.log("user id: " + userId);
+        
+        const inputStats = {"query":"\n  query GetAimlabProfileAgg($where: AimlabPlayWhere!) {\n    aimlab {\n      plays_agg(where: $where) {\n        group_by {\n          task_id\n          task_name\n        }\n        aggregate {\n          count\n          avg {\n            score\n            accuracy\n          }\n          max {\n            score\n            accuracy\n            created_at\n          }\n        }\n      }\n    }\n  }\n","variables":{"where":{"is_practice":{"_eq":false},"score":{"_gt":0},"user_id":{"_eq": userId },"task_mode":{"_eq":42}}}}
+        
+        const optionsStats = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inputStats),
+        }
+
+        const responseStats = await fetch("https://api.aimlab.gg/graphql", optionsStats)
+            .then(function(result){
+                return result.json();
+            });;
+
+        console.log("Stats:\n");
+        console.log(responseStats);
+
+        const data = responseStats.data.aimlab.plays_agg;
+
+        for (var i = 0; i < data.length; i++){
+            if(data[i].group_by.task_name === task){
+                return data[i].aggregate.max.score;
+            }
+        } 
     }
 
-    const dataset = [
+    const [goalScore, setGoalScore] = React.useState(1);
+    const [actualScore, setActualScore] = React.useState(0);
+    const [displayScore, setDisplayScore] = React.useState(0);
+
+    var currentGoals;
+    var currentScoreAtGoals;
+
+    let dataset = [
         {
-            completions: 1,
+            completions: 0,
             month: 'Jan',
         },
         {
-            completions: 1,
+            completions: 0,
             month: 'Feb',
         },
         {
@@ -100,27 +145,27 @@ const Home = ({user, signOut}) => {
             month: 'Apr',
         },
         {
-            completions: 2,
+            completions: 0,
             month: 'May',
         },
         {
-            completions: 4,
-            month: 'June',
+            completions: 0,
+            month: 'Jun',
         },
         {
-            completions: 1,
-            month: 'July',
+            completions: 0,
+            month: 'Jul',
         },
         {
-            completions: 3,
+            completions: 0,
             month: 'Aug',
         },
         {
             completions: 0,
-            month: 'Sept',
+            month: 'Sep',
         },
         {
-            completions: 1,
+            completions: 0,
             month: 'Oct',
         },
         {
@@ -128,10 +173,68 @@ const Home = ({user, signOut}) => {
             month: 'Nov',
         },
         {
-            completions: 1,
+            completions: 0,
             month: 'Dec',
         },
     ]
+
+    
+    
+    const [task, setTask] = React.useState('');
+    const [score, setScore] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [history, setHistory] = React.useState([]);
+    const [formattedHistory, setFormattedHistory] = React.useState(dataset);
+    const [goalsCompleted, setGoalsCompleted] = React.useState(0);
+
+    useEffect(() => {
+        const init = async() => {
+            currentGoals = await getGoals(user.signInDetails.loginId);
+            currentGoals = currentGoals.Item.items[0];
+            console.log(currentGoals);
+
+            if(currentGoals.task != null){
+                setTask(currentGoals.task);
+            }
+            if(currentGoals.username != null){
+                setUsername(currentGoals.username);
+            }
+            if(currentGoals.score !== ""){
+                setGoalScore(currentGoals.score);
+                setScore(currentGoals.score);
+            }
+            if(currentGoals.history != null){
+                setHistory(currentGoals.history);
+                setGoalsCompleted(currentGoals.history.length);
+                for(var i = 0; i < currentGoals.history.length; i++){
+                    for(var j = 0; j < 12; j++){
+                        if(currentGoals.history[i].includes(dataset[j].month)){
+                            dataset[j].completions+=1;
+                        }
+                    }
+                    
+                }
+                setFormattedHistory(dataset);
+                console.log("dataset: " + dataset);
+            }
+            if(currentGoals.username != null && currentGoals.task !== ""){
+                currentScoreAtGoals = await getAimlabStats(currentGoals.username, currentGoals.task);
+                console.log(currentScoreAtGoals);
+                setActualScore(currentScoreAtGoals);
+
+                if(currentScoreAtGoals > currentGoals.score){
+                    setDisplayScore(currentGoals.score);
+                } else{
+                    setDisplayScore(currentScoreAtGoals);
+                }
+            }
+
+        }
+        init();
+    },[]);
+      
+
+    
 
 
     return (
@@ -159,14 +262,14 @@ const Home = ({user, signOut}) => {
             <Typography variant="h3">Home</Typography>
             <Box sx={{height:100}}></Box>
             <Paper sx={{ width:"30%", padding:1}} elevation={1}>
-                <Typography variant="h6"><Typography sx={{color:'green'}} variant="h6" component="span">XX</Typography> goals completed</Typography>
+                <Typography variant="h6"><Typography sx={{color:'green'}} variant="h6" component="span">{goalsCompleted}</Typography> goals completed</Typography>
                 <br/>
-                <Typography variant="h6"><Typography sx={{color:'green'}} variant="h6" component="span">XX</Typography> % current progress </Typography>
+                <Typography variant="h6"><Typography sx={{color:'green'}} variant="h6" component="span">{(actualScore/goalScore * 100).toFixed(1)}</Typography> % current progress </Typography>
             </Paper>   
 
             <Paper sx={{padding:1}} elevation={0}>
                 <BarChart
-                    dataset={dataset}
+                    dataset={formattedHistory}
                     xAxis={[{ dataKey: 'month', scaleType: 'band'}]}
                     series={[{ dataKey: 'completions'}]}
                     yAxis={[{label: 'Goals Completed'}]}
